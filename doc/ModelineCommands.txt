@@ -1,0 +1,105 @@
+*ModelineCommands.txt*  Extended modelines that allow the execution of arbitrary Vim commands.
+
+		     MODELINE COMMANDS    by Ingo Karkat
+							*ModelineCommands.vim*
+description			|ModelineCommands-description|
+usage				|ModelineCommands-usage|
+installation			|ModelineCommands-installation|
+configuration			|ModelineCommands-configuration|
+integration			|ModelineCommands-integration|
+limitations			|ModelineCommands-limitations|
+known problems			|ModelineCommands-known-problems|
+todo				|ModelineCommands-todo|
+history				|ModelineCommands-history|
+
+==============================================================================
+DESCRIPTION					*ModelineCommands-description*
+
+    [text]{white}{vimcommand:|VimCommand:}[!][white]:{commands}:[text]
+    [text]{white}{vimcommand:|VimCommand:}[!][white]:{commands}:[white]{digest}[white]:[text]
+
+[text]			any text or empty
+{white}			at least one blank character (<Space> or <Tab>)
+{vimcommand:|VimCommand:}the string "vimcommand:" or "VimCommand:"
+[!]			optional marker for |:silent!| execution
+[white]			optional white space
+{commands}		Ex commands
+:[white]{digest}[white]	optional hash over {command} and
+			|g:ModelineCommands_Secret| concatenated together, to
+			verify the integrity of {command}
+:			a colon
+[text]			any text or empty
+
+Examples:
+   /* vimcommand: IndentConsistencyCopOff: */ ~
+
+HOW IT WORKS								     *
+
+SOURCE									     *
+(Original Vim tip, Stack Overflow answer, ...)
+
+SEE ALSO								     *
+(Plugins offering complementary functionality, or plugins using this library.)
+
+RELATED WORKS								     *
+(Alternatives from other authors, other approaches, references not used here.)
+
+==============================================================================
+USAGE						      *ModelineCommands-usage*
+							  *:ModelineCommands*
+:ModelineCommands	Description here.
+
+EXAMPLE						    *ModelineCommands-example*
+
+==============================================================================
+INSTALLATION				       *ModelineCommands-installation*
+
+This script is packaged as a |vimball|. If you have the "gunzip" decompressor
+in your PATH, simply edit the *.vmb.gz package in Vim; otherwise, decompress
+the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
+vimball or via the |:UseVimball| command. >
+    vim ModelineCommands*.vmb.gz
+    :so %
+To uninstall, use the |:RmVimball| command.
+
+DEPENDENCIES				       *ModelineCommands-dependencies*
+
+- Requires Vim 7.0 or higher.
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.025 or
+  higher.
+
+==============================================================================
+CONFIGURATION				      *ModelineCommands-configuration*
+
+For a permanent configuration, put the following commands into your |vimrc|:
+configvar
+						      *ModelineCommands-remap*
+plugmap
+==============================================================================
+INTEGRATION					*ModelineCommands-integration*
+
+==============================================================================
+LIMITATIONS					*ModelineCommands-limitations*
+
+KNOWN PROBLEMS				     *ModelineCommands-known-problems*
+
+TODO						       *ModelineCommands-todo*
+
+IDEAS						      *ModelineCommands-ideas*
+
+==============================================================================
+HISTORY						    *ModelineCommands-history*
+
+GOAL
+First published version.
+
+0.01	13-Jul-2016
+Started development.
+
+==============================================================================
+Copyright: (C) 2016 Ingo Karkat
+The VIM LICENSE applies to this plugin; see |copyright|.
+
+Maintainer:	Ingo Karkat <ingo@karkat.de>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
