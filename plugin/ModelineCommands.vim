@@ -10,6 +10,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	002	14-Jul-2016	Add several configuration variables.
 "	001	13-Jul-2016	file creation
 
 " Avoid installing twice or when in unsupported Vim version.
@@ -31,6 +32,26 @@ endif
 if ! exists('g:ModelineCommands_LastLines')
     let g:ModelineCommands_LastLines = &modelines
 endif
+if ! exists('g:ModelineCommands_CommandValidator')
+    let g:ModelineCommands_CommandValidator = ''
+endif
+if ! exists('g:ModelineCommands_DigestValidator')
+    let g:ModelineCommands_DigestValidator = ''
+endif
+if ! exists('g:ModelineCommands_AcceptUnvalidated')
+    let g:ModelineCommands_AcceptUnvalidated = 'ask'
+endif
+if ! exists('g:ModelineCommands_AcceptValidated')
+    let g:ModelineCommands_AcceptValidated = 'yes'
+endif
+if ! exists('g:ModelineCommands_AllowedCommands')
+    let g:ModelineCommands_AllowedCommands = {}
+endif
+if ! exists('g:ModelineCommands_DisallowedCommands')
+    let g:ModelineCommands_DisallowedCommands = {}
+endif
+
+
 
 
 "- autocmds --------------------------------------------------------------------
@@ -62,3 +83,4 @@ endif
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
+" vimcommand: echomsg "I got loaded from ModelineCommands":
