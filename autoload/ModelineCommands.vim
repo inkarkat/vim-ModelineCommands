@@ -50,7 +50,7 @@ function! ModelineCommands#Get()
 	    let l:acceptPolicy = ingo#plugin#setting#GetBufferLocal('ModelineCommands_AcceptValidated')
 	    try
 		let l:isValid = call(l:Validator, l:arguments)
-	    catch /^Vim\%((\a\+)\)\=:/
+	    catch
 		" Switch to policy for unvalidated commands.
 		let l:acceptPolicy = ingo#plugin#setting#GetBufferLocal('ModelineCommands_AcceptUnvalidated')
 		let l:isValid = 1
