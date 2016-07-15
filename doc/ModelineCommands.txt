@@ -72,9 +72,44 @@ DEPENDENCIES				       *ModelineCommands-dependencies*
 CONFIGURATION				      *ModelineCommands-configuration*
 
 For a permanent configuration, put the following commands into your |vimrc|:
-configvar
-						      *ModelineCommands-remap*
-plugmap
+					      *g:ModelineCommands_FilePattern*
+If you want to search for modeline commands only in certain files, you can
+specify |autocmd-patterns| instead of the default "*". This must be set before
+the plugin is sourced: >
+    let g:ModelineCommands_FilePattern = '*.h,*.c,*.cpp'
+<
+		*g:ModelineCommands_FirstLines* *g:ModelineCommands_LastLines*
+The number of lines at the start of the buffer that are searched for modeline
+commands; the default is 'modelines' >
+    let g:ModelineCommands_FirstLines = 10
+<
+As arbitrary Vim commands can do harm to your system (with |:!| and :call
+system(...), you can execute any external command!), there are two kinds of
+gatekeepers:
+   *b:ModelineCommands_CommandValidator* *g:ModelineCommands_CommandValidator*
+Modeline commands that do not have a digest attached can be filtered based on
+the command itself. You can configure a Funcref that takes the command as an
+argument, and returns whether it should be allowed: >
+    let g:ModelineCommands_CommandValidator = function('...')
+The validator probably will attempt to match the passed command with a regexp.
+Note that blacklisting is unreliable, as there are many ways that malicious
+commands can be written. Better just allow certain, harmless commands, and be
+strict with your regular expression.
+       *b:ModelineDigests_DigestValidator* *g:ModelineDigests_DigestValidator*
+Both the modeline command and the digest are passed to this validator. The
+validator should re-generate the digest from the passed command and a secret,
+and compare that with the passed digest.
+
+Validation establishes a certain level of security. If it fails, the command
+will be rejected. You can still configure the policy for accepted commands,
+one of "no" (discarded), "ask" (query you before execution), "yes" (allow).
+ *b:ModelineCommands_AcceptUnvalidated* *g:ModelineCommands_AcceptUnvalidated*
+Policy for commands where no (command or digest-based) validator is configured:
+    let g:ModelineCommands_AcceptUnvalidated = "ask"
+     *b:ModelineCommands_AcceptValidated* *g:ModelineCommands_AcceptValidated*
+Policy for commands that passed a (command or digest-based) validator: >
+    let g:ModelineCommands_AcceptValidated = "yes"
+<
 ==============================================================================
 INTEGRATION					*ModelineCommands-integration*
 
