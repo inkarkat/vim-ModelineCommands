@@ -1,0 +1,4 @@
+# vimcommand: echomsg "I'm wrongly digested":123456789cafebaba:
+# vimcommand: echomsg "this got the right digest":91f144bc7529363d5532ab1eed988f6f4a597b7e5d6ae05516fd67765226d182:
+# vimcommand: echomsg "this got the right shortened digest":aaa430df:
+# vimcommand: echomsg "this\: has a (escaped) colon inside ":bc0f80a1:
