@@ -32,12 +32,7 @@ endif
 if ! exists('g:ModelineCommands_LastLines')
     let g:ModelineCommands_LastLines = &modelines
 endif
-if ! exists('g:ModelineCommands_CommandValidator')
-    let g:ModelineCommands_CommandValidator = ''
-endif
-if ! exists('g:ModelineCommands_DigestValidator')
-    let g:ModelineCommands_DigestValidator = ''
-endif
+
 if ! exists('g:ModelineCommands_AcceptUnvalidated')
     let g:ModelineCommands_AcceptUnvalidated = 'ask'
 endif
@@ -51,7 +46,18 @@ if ! exists('g:ModelineCommands_DisallowedCommands')
     let g:ModelineCommands_DisallowedCommands = {}
 endif
 
+if v:version < 702 | runtime autoload/ModelineCommands/Validators.vim | endif  " The Funcref doesn't trigger the autoload in older Vim versions.
+if ! exists('g:ModelineCommands_CommandValidator')
+    let g:ModelineCommands_CommandValidator = function('ModelineCommands#Validators#RegexpCommandValidator')
+endif
+if ! exists('g:ModelineCommands_DigestValidator')
+    let g:ModelineCommands_DigestValidator = function('ModelineCommands#Validators#Sha256DigestValidator')
+endif
 
+if ! exists('g:ModelineCommands_ValidCommandPattern')
+    let g:ModelineCommands_ValidCommandPattern = ''
+endif
+" g:ModelineCommands_Secret not defined here, as there's no sensible default.
 
 
 "- autocmds --------------------------------------------------------------------
