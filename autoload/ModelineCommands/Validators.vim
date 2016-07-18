@@ -11,7 +11,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"	001	15-Jul-2016	file creation
+"   1.00.001	15-Jul-2016	file creation
 
 function! ModelineCommands#Validators#RegexpCommandValidator( command )
     let l:regexp = ingo#plugin#setting#GetBufferLocal('ModelineCommands_ValidCommandPattern')
