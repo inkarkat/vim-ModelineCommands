@@ -10,6 +10,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	003	16-Jul-2016	Extract g:ModelineCommands_DigestPattern.
 "	002	14-Jul-2016	Add several configuration variables.
 "	001	13-Jul-2016	file creation
 
@@ -31,6 +32,9 @@ if ! exists('g:ModelineCommands_FirstLines')
 endif
 if ! exists('g:ModelineCommands_LastLines')
     let g:ModelineCommands_LastLines = &modelines
+endif
+if ! exists('g:ModelineCommands_DigestPattern')
+    let g:ModelineCommands_DigestPattern = '\x\{8,64}'
 endif
 
 if ! exists('g:ModelineCommands_AcceptUnvalidated')
