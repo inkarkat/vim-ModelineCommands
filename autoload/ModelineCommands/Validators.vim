@@ -1,0 +1,39 @@
+" ModelineCommands/Validators.vim: Default validators for modeline commands.
+"
+" DEPENDENCIES:
+"   - ingo/actions.vim autoload script
+"   - ingo/compat.vim autoload script
+"   - ingo/plugin/settings.vim autoload script
+"
+" Copyright: (C) 2016 Ingo Karkat
+"   The VIM LICENSE applies to this script; see ':help copyright'.
+"
+" Maintainer:	Ingo Karkat <ingo@karkat.de>
+"
+" REVISION	DATE		REMARKS
+"	001	15-Jul-2016	file creation
+
+function! ModelineCommands#Validators#RegexpCommandValidator( command )
+    let l:regexp = ingo#plugin#setting#GetBufferLocal('ModelineCommands_ValidCommandPattern')
+    if empty(l:regexp)
+	throw 'No regexp defined in ModelineCommands_ValidCommandPattern'
+    endif
+
+    return (a:command =~# l:regexp)
+endfunction
+
+function! ModelineCommands#Validators#Sha256DigestValidator( command, digest )
+    let l:Secret = ingo#plugin#setting#GetBufferLocal('ModelineCommands_Secret', '')
+    if empty(l:Secret)
+	throw 'No secret defined in ModelineCommands_Secret variable'
+    endif
+    let l:secretValue = ingo#actions#ValueOrFunc(l:Secret)
+    if empty(l:secretValue)
+	throw printf('Function %s() from ModelineCommands_Secret variable did not yield a value', l:Secret)
+    endif
+
+    let l:newDigest = ingo#compat#sha256(a:command . l:secretValue)
+    return ingo#str#StartsWith(l:newDigest, a:digest, 1)
+endfunction
+
+" vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
