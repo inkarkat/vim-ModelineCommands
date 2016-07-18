@@ -99,7 +99,14 @@ strict with your regular expression.
 Both the modeline command and the digest are passed to this validator. The
 validator should re-generate the digest from the passed command and a secret,
 and compare that with the passed digest.
-
+	 *b:ModelineCommands_DigestPattern* *g:ModelineCommands_DigestPattern*
+The format of the digest depends on the digest function, typically it is a
+hexadecimal string. Vim's |sha256()| function returns a 64-digit hex number.
+The default digest validator accepts shorter digests, so you can truncate the
+long number in the modeline. How short (and therefore how insecure) the
+digest can be can be configured in the digest pattern. >
+    let g:ModelineCommands_DigestPattern = '\x\{8,64}'
+<
 Validation establishes a certain level of security. If it fails, the command
 will be rejected. You can still configure the policy for accepted commands,
 one of "no" (discarded), "ask" (query you before execution), "yes" (allow).
