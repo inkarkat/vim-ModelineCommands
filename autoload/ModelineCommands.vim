@@ -10,6 +10,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	003	16-Jul-2016	Extract g:ModelineCommands_DigestPattern.
 "	002	14-Jul-2016	Implement validation concept.
 "	001	13-Jul-2016	file creation
 let s:save_cpo = &cpo
@@ -27,7 +28,7 @@ function! s:ExtractModelines()
     let l:matches = filter(
     \   map(
     \       l:lines,
-    \       'matchlist(v:val, ''\C\s[vV]im[cC]ommand\(!\)\?:\s*\(\%(\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\:\|[^:]\)\+\)\%(:\s*\(\x\{4,64}\)\s*\)\?:'')'
+    \       'matchlist(v:val, ''\C\s[vV]im[cC]ommand\(!\)\?:\s*\(\%(\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\:\|[^:]\)\+\)\%(:\s*\('' . ingo#plugin#setting#GetBufferLocal("ModelineCommands_DigestPattern") . ''\)\s*\)\?:'')'
     \   ),
     \   '! empty(v:val)'
     \)
