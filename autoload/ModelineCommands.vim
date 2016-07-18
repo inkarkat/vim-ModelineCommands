@@ -10,7 +10,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"	003	16-Jul-2016	Extract g:ModelineCommands_DigestPattern.
+"   1.00.003	16-Jul-2016	Extract g:ModelineCommands_DigestPattern.
 "	002	14-Jul-2016	Implement validation concept.
 "	001	13-Jul-2016	file creation
 let s:save_cpo = &cpo
