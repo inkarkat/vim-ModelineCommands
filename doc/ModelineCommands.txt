@@ -6,7 +6,6 @@ description			|ModelineCommands-description|
 usage				|ModelineCommands-usage|
 installation			|ModelineCommands-installation|
 configuration			|ModelineCommands-configuration|
-integration			|ModelineCommands-integration|
 limitations			|ModelineCommands-limitations|
 known problems			|ModelineCommands-known-problems|
 todo				|ModelineCommands-todo|
@@ -14,6 +13,30 @@ history				|ModelineCommands-history|
 
 ==============================================================================
 DESCRIPTION					*ModelineCommands-description*
+
+
+SEE ALSO								     *
+(Plugins offering complementary functionality, or plugins using this library.)
+
+RELATED WORKS								     *
+
+- let-modeline.vim (vimscript #83) extends the modeline feature to the
+  assignment of variables
+
+==============================================================================
+USAGE						      *ModelineCommands-usage*
+
+Modeline commands are read and executed after the buffer has been read (i.e.
+on |BufReadPost|). The first and last lines of the buffer are searched for
+them.
+						     *ModelineCommands-syntax*
+The modeline command syntax is similar to the second form of the built-in
+|modeline| feature, using the vimcommand: prefix instead of vim:
+The command(s) (you can both concatenate multiple Ex commands via |:bar|
+and/or have separate modeline commands on multiple lines) are concluded with a
+":" (followed by an optional command digest for verification of its integrity,
+also concluded with a ":"); that means that colons within the command must be
+escaped by preceding them with a backslash.
 
     [text]{white}{vimcommand:|VimCommand:}[!][white]:{commands}:[text]
     [text]{white}{vimcommand:|VimCommand:}[!][white]:{commands}:[white]{digest}[white]:[text]
@@ -30,26 +53,11 @@ DESCRIPTION					*ModelineCommands-description*
 :			a colon
 [text]			any text or empty
 
-Examples:
-   /* vimcommand: IndentConsistencyCopOff: */ ~
-
-HOW IT WORKS								     *
-
-SOURCE									     *
-(Original Vim tip, Stack Overflow answer, ...)
-
-SEE ALSO								     *
-(Plugins offering complementary functionality, or plugins using this library.)
-
-RELATED WORKS								     *
-(Alternatives from other authors, other approaches, references not used here.)
-
-==============================================================================
-USAGE						      *ModelineCommands-usage*
-							  *:ModelineCommands*
-:ModelineCommands	Description here.
 
 EXAMPLE						    *ModelineCommands-example*
+   /* vimcommand: let b:frobnize = "on": */ ~
+   /* vimcommand: IndentConsistencyCopOff: */ ~
+   /* vimcommand: echomsg "modeline commands\: an example" | version:7fab292cd: */ ~
 
 ==============================================================================
 INSTALLATION				       *ModelineCommands-installation*
@@ -86,6 +94,7 @@ commands; the default is 'modelines' >
 As arbitrary Vim commands can do harm to your system (with |:!| and :call
 system(...), you can execute any external command!), there are two kinds of
 gatekeepers:
+
    *b:ModelineCommands_CommandValidator* *g:ModelineCommands_CommandValidator*
 Modeline commands that do not have a digest attached can be filtered based on
 the command itself. You can configure a Funcref that takes the command as an
@@ -94,7 +103,11 @@ argument, and returns whether it should be allowed: >
 The validator probably will attempt to match the passed command with a regexp.
 Note that blacklisting is unreliable, as there are many ways that malicious
 commands can be written. Better just allow certain, harmless commands, and be
-strict with your regular expression.
+strict with your regular expression. The default validator tries to match the
+command with a single regular expression:
+*b:ModelineCommands_ValidCommandPattern* *g:ModelineCommands_ValidCommandPattern*
+Its default just allows simple |:let| and |:echomsg| of numbers and strings.
+
        *b:ModelineDigests_DigestValidator* *g:ModelineDigests_DigestValidator*
 Both the modeline command and the digest are passed to this validator. The
 validator should re-generate the digest from the passed command and a secret,
@@ -106,7 +119,13 @@ The default digest validator accepts shorter digests, so you can truncate the
 long number in the modeline. How short (and therefore how insecure) the
 digest can be can be configured in the digest pattern. >
     let g:ModelineCommands_DigestPattern = '\x\{8,64}'
-<
+<		       *b:ModelineCommands_Secret* *g:ModelineCommands_Secret*
+The default digest validator requires a secret string. Either put that
+directly into the variable, or assign a Funcref that will return it. If a
+person knows the secret, he can create valid digests for arbirary modeline
+commands, and make you execute the command when you open the file, so guard
+this secret carefully!
+
 Validation establishes a certain level of security. If it fails, the command
 will be rejected. You can still configure the policy for accepted commands,
 one of "no" (discarded), "ask" (query you before execution), "yes" (allow).
@@ -117,9 +136,6 @@ Policy for commands where no (command or digest-based) validator is configured:
 Policy for commands that passed a (command or digest-based) validator: >
     let g:ModelineCommands_AcceptValidated = "yes"
 <
-==============================================================================
-INTEGRATION					*ModelineCommands-integration*
-
 ==============================================================================
 LIMITATIONS					*ModelineCommands-limitations*
 
