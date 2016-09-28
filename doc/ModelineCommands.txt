@@ -67,9 +67,9 @@ escaped by preceding them with a backslash.
 [!]			optional marker for |:silent!| execution
 [white]			optional white space
 {commands}		Ex commands
-:[white]{digest}[white]	optional hash over {command} and
+:[white]{digest}[white]	optional hash over {commands} and
 			|g:ModelineCommands_Secret| concatenated together, to
-			verify the integrity of {command}
+			verify the integrity of {commands}
 :			a colon
 [text]			any text or empty
 
