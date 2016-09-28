@@ -14,9 +14,29 @@ history				|ModelineCommands-history|
 ==============================================================================
 DESCRIPTION					*ModelineCommands-description*
 
+Modelines are a comfortable means to adapt Vim settings (like filetype and
+indentation), embedded in the edited file itself. For a power user, it would
+be beneficial to apply the same concept to plugin settings and other
+customizations. Unfortunately, modelines are not extensible, and cannot be
+used to set variables or invoke other commands. One has to define |autocmd|s,
+or use a local vimrc plugin, but those solutions all keep the configuration
+separate from the edited file, so it's more effort to keep it in sync.
+
+This plugin extends Vim's built-in modelines to execute any Ex command(s) when
+a file is opened. A set of configurable validators examine the commands and
+can verify the correctness of an optional command digest, in order to prevent
+the execution of potentially malicious commands from unknown sources. This
+way, you could restrict the commands to only simple |:let|, or have the plugin
+query you to confirm execution of anything that isn't signed with your own
+secret key.
 
 SEE ALSO								     *
-(Plugins offering complementary functionality, or plugins using this library.)
+
+- The localrc plugin (vimscript #3393), especially with my own enhancements
+  (https://github.com/inkarkat/vim-localrc/tree/enhancements) executes Vim
+  scripts in the same directory as the opened file, also based on filetype.
+  With this, you can place arbitrary customizations close to the file(s), but
+  still external to them.
 
 RELATED WORKS								     *
 
