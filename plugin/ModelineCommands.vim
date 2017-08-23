@@ -4,12 +4,16 @@
 "   - ModelineCommands.vim autoload script
 "   - ingo/msg.vim autoload script
 "
-" Copyright: (C) 2016 Ingo Karkat
+" Copyright: (C) 2016-2017 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.005	24-Aug-2017	Correct regular expression for double-quoted
+"				String: Must put the escaped inner double quote
+"				branch before the non-quote branch.
+"				Single-quoted one is fine.
 "   1.00.004	19-Jul-2016	Define default
 "				ModelineCommands_ValidCommandPattern that allows
 "				:let and :echomsg.
@@ -64,7 +68,7 @@ endif
 if ! exists('g:ModelineCommands_ValidCommandPattern')
     " let var = number | 0xHexNumber | 'string' | "string"
     " echosmg number | 0xHexNumber | 'string' | "string"
-    let g:ModelineCommands_ValidCommandPattern = '^\%(let\s\+\<\%([bwglsav]:\)\=\h[a-zA-Z0-9#_]*\>\s*[.+-]\==\s*\|echom\%[sg]\s\+\)\%(-\=\d\+\%(\.\d\+\%([eE][+-]\=\d\+\)\=\)\=\|\<0[xX]\x\+\|''\%([^'']\|''''\)*''\|"\%([^"]\|\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\"\)*"\)\s*$'
+    let g:ModelineCommands_ValidCommandPattern = '^\%(let\s\+\<\%([bwglsav]:\)\=\h[a-zA-Z0-9#_]*\>\s*[.+-]\==\s*\|echom\%[sg]\s\+\)\%(-\=\d\+\%(\.\d\+\%([eE][+-]\=\d\+\)\=\)\=\|\<0[xX]\x\+\|''\%([^'']\|''''\)*''\|"\%(\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\"\|[^"]\)*"\)\s*$'
 endif
 " g:ModelineCommands_Secret not defined here, as there's no sensible default.
 
