@@ -10,6 +10,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.00.004	19-Jul-2016	Define default
+"				ModelineCommands_ValidCommandPattern that allows
+"				:let and :echomsg.
 "	003	16-Jul-2016	Extract g:ModelineCommands_DigestPattern.
 "	002	14-Jul-2016	Add several configuration variables.
 "	001	13-Jul-2016	file creation
@@ -59,7 +62,9 @@ if ! exists('g:ModelineCommands_DigestValidator')
 endif
 
 if ! exists('g:ModelineCommands_ValidCommandPattern')
-    let g:ModelineCommands_ValidCommandPattern = ''
+    " let var = number | 0xHexNumber | 'string' | "string"
+    " echosmg number | 0xHexNumber | 'string' | "string"
+    let g:ModelineCommands_ValidCommandPattern = '^\%(let\s\+\<\%([bwglsav]:\)\=\h[a-zA-Z0-9#_]*\>\s*[.+-]\==\s*\|echom\%[sg]\s\+\)\%(-\=\d\+\%(\.\d\+\%([eE][+-]\=\d\+\)\=\)\=\|\<0[xX]\x\+\|''\%([^'']\|''''\)*''\|"\%([^"]\|\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\"\)*"\)\s*$'
 endif
 " g:ModelineCommands_Secret not defined here, as there's no sensible default.
 
