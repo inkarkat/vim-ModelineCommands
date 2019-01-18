@@ -82,10 +82,16 @@ EXAMPLE						    *ModelineCommands-example*
 ==============================================================================
 INSTALLATION				       *ModelineCommands-installation*
 
-This script is packaged as a |vimball|. If you have the "gunzip" decompressor
-in your PATH, simply edit the *.vmb.gz package in Vim; otherwise, decompress
-the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
-vimball or via the |:UseVimball| command. >
+The code is hosted in a Git repo at
+    https://github.com/inkarkat/vim-ModelineCommands
+You can use your favorite plugin manager, or "git clone" into a directory used
+for Vim |packages|. Releases are on the "stable" branch, the latest unstable
+development snapshot on "master".
+
+This script is also packaged as a |vimball|. If you have the "gunzip"
+decompressor in your PATH, simply edit the *.vmb.gz package in Vim; otherwise,
+decompress the archive first, e.g. using WinZip. Inside Vim, install by
+sourcing the vimball or via the |:UseVimball| command. >
     vim ModelineCommands*.vmb.gz
     :so %
 To uninstall, use the |:RmVimball| command.
@@ -165,6 +171,12 @@ TODO						       *ModelineCommands-todo*
 
 IDEAS						      *ModelineCommands-ideas*
 
+CONTRIBUTING					 *ModelineCommands-contribute*
+
+Report any bugs, send patches, or suggest features via the issue tracker at
+https://github.com/inkarkat/vim-ModelineCommands/issues or email (address
+below).
+
 ==============================================================================
 HISTORY						    *ModelineCommands-history*
 
@@ -175,7 +187,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2016 Ingo Karkat
+Copyright: (C) 2016-2019 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
