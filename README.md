@@ -169,8 +169,8 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
-##### GOAL
-First published version.
+##### 1.00    18-Jan-2019
+- First published version.
 
 ##### 0.01    13-Jul-2016
 - Started development.
