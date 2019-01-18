@@ -4,15 +4,10 @@
 "   - ingo/escape.vim autoload script
 "   - ingo/range/borders.vim autoload script
 "
-" Copyright: (C) 2016 Ingo Karkat
+" Copyright: (C) 2016-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.00.003	16-Jul-2016	Extract g:ModelineCommands_DigestPattern.
-"	002	14-Jul-2016	Implement validation concept.
-"	001	13-Jul-2016	file creation
 let s:save_cpo = &cpo
 set cpo&vim
 

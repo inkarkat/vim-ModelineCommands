@@ -5,13 +5,10 @@
 "   - ingo/compat.vim autoload script
 "   - ingo/plugin/settings.vim autoload script
 "
-" Copyright: (C) 2016 Ingo Karkat
+" Copyright: (C) 2016-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.00.001	15-Jul-2016	file creation
 
 function! ModelineCommands#Validators#RegexpCommandValidator( command )
     let l:regexp = ingo#plugin#setting#GetBufferLocal('ModelineCommands_ValidCommandPattern')
