@@ -4,22 +4,10 @@
 "   - ModelineCommands.vim autoload script
 "   - ingo/msg.vim autoload script
 "
-" Copyright: (C) 2016-2017 Ingo Karkat
+" Copyright: (C) 2016-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"   1.00.005	24-Aug-2017	Correct regular expression for double-quoted
-"				String: Must put the escaped inner double quote
-"				branch before the non-quote branch.
-"				Single-quoted one is fine.
-"   1.00.004	19-Jul-2016	Define default
-"				ModelineCommands_ValidCommandPattern that allows
-"				:let and :echomsg.
-"	003	16-Jul-2016	Extract g:ModelineCommands_DigestPattern.
-"	002	14-Jul-2016	Add several configuration variables.
-"	001	13-Jul-2016	file creation
 
 " Avoid installing twice or when in unsupported Vim version.
 if exists('g:loaded_ModelineCommands') || (v:version < 700)
