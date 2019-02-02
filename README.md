@@ -65,9 +65,41 @@ USAGE
     [text]                  any text or empty
 
 ### EXAMPLE
+The default g:ModelineCommands\_CommandValidator only whitelists simple
+:let variable assignments and :echomsg commands (to / of numbers and
+String literals), to prevent the execution of potentially malicious commands.
 ```
-   /\* vimcommand: let b:frobnize = "on": \*/
-   /\* vimcommand: IndentConsistencyCopOff: \*/
+   /\* vimcommand: let b\:frobnize = "on": \*/
+   /\* vimcommand: echomsg "echoed from a modeline": \*/
+```
+By default, only validated commands are executed, and others are rejected.
+```
+   /\* vimcommand: source ~/.vim/additions.vim: \*/
+```
+When opened with the default configuration, above modeline causes this error:
+
+    ModelineCommands: Command did not pass validation: source ~/.vim/additions.vim
+
+To allow additional commands, you either have to:
+- extend the whitelist in g:ModelineCommands\_ValidCommandPattern
+- disable the default validator
+ <!-- -->
+
+    :let g:ModelineCommands_CommandValidator = ''
+
+  which with the default policy in g:ModelineCommands\_AcceptUnvalidated will
+  ask you for confirmation (which can be remembered for the current Vim
+  session):
+
+    ModelineCommands: Execute command?
+    let b:frobnize = "on"
+    (Y)es, (N)o, (A)lways, Ne(v)er:
+
+- write your own custom validator
+- use the g:ModelineDigests\_DigestValidator that allows you to sign
+  modelines with a secret key, and append that digest to the command:
+```
+   /\* vimcommand: source ~/.vim/additions.vim:8e69fa01: \*/
    /\* vimcommand: echomsg "modeline commands\: an example" | version:7fab292cd: \*/
 ```
 
@@ -116,6 +148,8 @@ As arbitrary Vim commands can do harm to your system (with :! and :call
 system(...), you can execute any external command!), there are two kinds of
 gatekeepers:
 
+### COMMAND VALIDATION
+
 Modeline commands that do not have a digest attached can be filtered based on
 the command itself. You can configure a Funcref that takes the command as an
 argument, and returns whether it should be allowed:
@@ -128,17 +162,24 @@ commands can be written. Better just allow certain, harmless commands, and be
 strict with your regular expression. The default validator tries to match the
 command with a single regular expression:
 
-Its default just allows simple :let and :echomsg of numbers and strings.
+The default pattern just allows simple :let variable assignments and
+:echomsg of literal numbers and strings. Note that depending on your plugins
+and configuration, even that simple setting of variables can lead to
+vulnerabilities!
+
+### DIGEST VALIDATION
+This is used if the modeline command has a :{digest} appended.
 
 Both the modeline command and the digest are passed to this validator. The
 validator should re-generate the digest from the passed command and a secret,
-and compare that with the passed digest.
+and compare that with the passed digest. At least that's what the default
+digest validator is doing, with a SHA-256 hash.
 
 The format of the digest depends on the digest function, typically it is a
 hexadecimal string. Vim's sha256() function returns a 64-digit hex number.
 The default digest validator accepts shorter digests, so you can truncate the
 long number in the modeline. How short (and therefore how insecure) the
-digest can be can be configured in the digest pattern.
+digest may be can be configured in the digest pattern.
 
     let g:ModelineCommands_DigestPattern = '\x\{8,64}'
 
@@ -148,12 +189,17 @@ person knows the secret, he can create valid digests for arbirary modeline
 commands, and make you execute the command when you open the file, so guard
 this secret carefully!
 
+### VALIDATION POLICY
 Validation establishes a certain level of security. If it fails, the command
 will be rejected. You can still configure the policy for accepted commands,
-one of "no" (discarded), "ask" (query you before execution), "yes" (allow).
+one of "no" (discarded), "ask" (query user before execution), "yes" (allow).
 
 Policy for commands where no (command or digest-based) validator is configured:
+
     let g:ModelineCommands_AcceptUnvalidated = "ask"
+
+Note: You need to disable the default validator(s) for this setting to take
+effect.
 
 Policy for commands that passed a (command or digest-based) validator:
 
