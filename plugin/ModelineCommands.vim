@@ -47,7 +47,12 @@ endif
 
 if v:version < 702 | runtime autoload/ModelineCommands/Validators.vim | endif  " The Funcref doesn't trigger the autoload in older Vim versions.
 if ! exists('g:ModelineCommands_CommandValidator')
-    let g:ModelineCommands_CommandValidator = function('ModelineCommands#Validators#RegexpCommandValidator')
+    let g:ModelineCommands_CommandValidator = function('ModelineCommands#Validators#CompositeCommandValidator')
+    if v:version < 702 | runtime autoload/ModelineCommands.vim | endif  " The Funcref doesn't trigger the autoload in older Vim versions.
+    let g:ModelineCommands_CompositeCommandValidators = [
+    \   function('ModelineCommands#Validators#RegexpCommandValidator'),
+    \   function('ModelineCommands#QueryUser')
+    \]
 endif
 if ! exists('g:ModelineCommands_DigestValidator')
     let g:ModelineCommands_DigestValidator = function('ModelineCommands#Validators#Sha256DigestValidator')

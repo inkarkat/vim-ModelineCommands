@@ -10,6 +10,18 @@
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 
+function! ModelineCommands#Validators#CompositeCommandValidator( command )
+    for l:Validator in g:ModelineCommands_CompositeCommandValidators
+	if call(l:Validator, [a:command])
+	    " Validator results are logically or-ed; i.e. we accept if one
+	    " validator accepts the command.
+	    return 1
+	endif
+    endfor
+
+    return 0
+endfunction
+
 function! ModelineCommands#Validators#RegexpCommandValidator( command )
     let l:regexp = ingo#plugin#setting#GetBufferLocal('ModelineCommands_ValidCommandPattern')
     if empty(l:regexp)
