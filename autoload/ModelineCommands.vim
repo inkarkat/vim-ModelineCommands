@@ -79,9 +79,9 @@ function! s:IsAccepted( acceptPolicy, command )
 endfunction
 
 function! ModelineCommands#QueryUser( command )
-    if has_key(g:ModelineCommands_DisallowedCommands, a:command)  || exists('g:MODELINECOMMANDS_DISALLOWED_COMMANDS') && has_key(g:MODELINECOMMANDS_DISALLOWED_COMMANDS, a:command)
+    if has_key(g:ModelineCommands_DisallowedCommands, a:command)  || has_key(ingo#plugin#persistence#Load('MODELINECOMMANDS_DISALLOWED_COMMANDS', {}), a:command)
 	return 0
-    elseif has_key(g:ModelineCommands_AllowedCommands, a:command) || exists('g:MODELINECOMMANDS_ALLOWED_COMMANDS')    && has_key(g:MODELINECOMMANDS_ALLOWED_COMMANDS, a:command)
+    elseif has_key(g:ModelineCommands_AllowedCommands, a:command) || has_key(ingo#plugin#persistence#Load('MODELINECOMMANDS_ALLOWED_COMMANDS',    {}), a:command)
 	return 1
     endif
 

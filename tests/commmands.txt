@@ -4,6 +4,6 @@
 /* vimcommand: let b\:frobnize = "on": */
 /* vimcommand: echomsg "echoed from a modeline": */
 By default, only validated commands are executed, and others are rejected.
-/* vimcommand: source/.vim/term.vim: */
+/* vimcommand: source ~/.vim/term.vim: */
 /* vimcommand: echo "this is special": */
 /* vimcommand: echo "one more": */
