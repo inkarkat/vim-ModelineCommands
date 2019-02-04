@@ -85,21 +85,21 @@ function! ModelineCommands#QueryUser( command )
 	return 1
     endif
 
-    let l:response = ingo#query#Confirm(printf("ModelineCommands: Execute command?\n%s", a:command), "&Yes\n&No\n&Always\nNe&ver" . (ingo#plugin#persistence#CanPersist() ? "\n&Forever\nNever &ever" : ""), 0, 'Question')
-    if l:response == 3
+    let l:response = ingo#plugin#persistence#QueryYesNo(printf("ModelineCommands: Execute command?\n%s", a:command))
+    if l:response ==# 'Always'
 	let g:ModelineCommands_AllowedCommands[a:command] = 1
 	return 1
-    elseif l:response == 4
+    elseif l:response ==# 'Never'
 	let g:ModelineCommands_DisallowedCommands[a:command] = 1
 	return 0
-    elseif l:response == 5
+    elseif l:response ==# 'Forever'
 	call ingo#plugin#persistence#Add('MODELINECOMMANDS_ALLOWED_COMMANDS', a:command, 1)
 	return 1
-    elseif l:response == 6
+    elseif l:response ==# 'Never ever'
 	call ingo#plugin#persistence#Add('MODELINECOMMANDS_DISALLOWED_COMMANDS', a:command, 1)
 	return 0
     else
-	return (l:response == 1)
+	return (l:response ==# 'Yes')
     endif
 endfunction
 
