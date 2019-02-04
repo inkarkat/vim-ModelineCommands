@@ -239,6 +239,8 @@ HISTORY
   persistence across sessions, the query mechanism may already work well
   enough for some users, and there's then no need to reconfigure the plugin.
   Also, a query is a better out-of-the-box behavior than rejecting modelines.
+- CHG: Don't allow :let commands that modify the plugin's own configuration,
+  as this could create vulnerabilities.
 
 __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.036!__
 

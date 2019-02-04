@@ -11,14 +11,25 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 
 function! ModelineCommands#Validators#CompositeCommandValidator( command )
-    for l:Validator in g:ModelineCommands_CompositeCommandValidators
-	if call(l:Validator, [a:command])
-	    " Validator results are logically or-ed; i.e. we accept if one
-	    " validator accepts the command.
-	    return 1
-	endif
-    endfor
+    try
+	for l:Validator in g:ModelineCommands_CompositeCommandValidators
+	    if call(l:Validator, [a:command])
+		" Validator results are logically or-ed; i.e. we accept if one
+		" validator accepts the command.
+		return 1
+	    endif
+	endfor
+    catch /^Reject$/
+	return 0
+    endtry
 
+    return 0
+endfunction
+
+function! ModelineCommands#Validators#PreventPluginReconfigurationCommandValidator( command )
+    if a:command =~# '\<let\s\+g:\%(ModelineCommands\|MODELINECOMMANDS\)_'
+	throw 'Reject'
+    endif
     return 0
 endfunction
 
