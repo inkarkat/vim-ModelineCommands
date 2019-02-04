@@ -88,8 +88,7 @@ To allow additional commands, you either have to:
     :let g:ModelineCommands_CommandValidator = ''
 
   which with the default policy in g:ModelineCommands\_AcceptUnvalidated will
-  ask you for confirmation (which can be remembered for the current Vim
-  session):
+ask you for confirmation:
 
     ModelineCommands: Execute command?
     let b:frobnize = "on"
@@ -125,7 +124,7 @@ To uninstall, use the :RmVimball command.
 ### DEPENDENCIES
 
 - Requires Vim 7.0 or higher.
-- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.025 or
+- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.036 or
   higher.
 
 CONFIGURATION
@@ -205,6 +204,11 @@ Policy for commands that passed a (command or digest-based) validator:
 
     let g:ModelineCommands_AcceptValidated = "yes"
 
+Those confirmations can be remembered for the current Vim session, and also
+across sessions if the "!" flag is part of the 'viminfo' setting):
+
+    set viminfo^=!  " Save and restore global variables.
+
 CONTRIBUTING
 ------------------------------------------------------------------------------
 
@@ -214,6 +218,12 @@ below).
 
 HISTORY
 ------------------------------------------------------------------------------
+
+##### 1.01    RELEASEME
+- ENH: Allow to persist the "ask" confirmation result also across Vim
+  sessions.
+
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.036!__
 
 ##### 1.00    18-Jan-2019
 - First published version.

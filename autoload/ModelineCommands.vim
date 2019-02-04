@@ -72,18 +72,24 @@ function! s:IsAccepted( acceptPolicy, command )
     elseif a:acceptPolicy ==# 'yes'
 	return 1
     elseif a:acceptPolicy ==# 'ask'
-	if has_key(g:ModelineCommands_DisallowedCommands, a:command)
+	if has_key(g:ModelineCommands_DisallowedCommands, a:command)  || exists('g:MODELINECOMMANDS_DISALLOWED_COMMANDS') && has_key(g:MODELINECOMMANDS_DISALLOWED_COMMANDS, a:command)
 	    return 0
-	elseif has_key(g:ModelineCommands_AllowedCommands, a:command)
+	elseif has_key(g:ModelineCommands_AllowedCommands, a:command) || exists('g:MODELINECOMMANDS_ALLOWED_COMMANDS')    && has_key(g:MODELINECOMMANDS_ALLOWED_COMMANDS, a:command)
 	    return 1
 	endif
 
-	let l:response = ingo#query#Confirm(printf("ModelineCommands: Execute command?\n%s", a:command), "&Yes\n&No\n&Always\nNe&ver", 0, 'Question')
+	let l:response = ingo#query#Confirm(printf("ModelineCommands: Execute command?\n%s", a:command), "&Yes\n&No\n&Always\nNe&ver" . (ingo#plugin#persistence#CanPersist() ? "\n&Forever\nNever &ever" : ""), 0, 'Question')
 	if l:response == 3
 	    let g:ModelineCommands_AllowedCommands[a:command] = 1
 	    return 1
 	elseif l:response == 4
 	    let g:ModelineCommands_DisallowedCommands[a:command] = 1
+	    return 0
+	elseif l:response == 5
+	    call ingo#plugin#persistence#Add('MODELINECOMMANDS_ALLOWED_COMMANDS', a:command, 1)
+	    return 1
+	elseif l:response == 6
+	    call ingo#plugin#persistence#Add('MODELINECOMMANDS_DISALLOWED_COMMANDS', a:command, 1)
 	    return 0
 	else
 	    return (l:response == 1)
