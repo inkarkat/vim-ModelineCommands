@@ -61,7 +61,7 @@ endif
 if ! exists('g:ModelineCommands_ValidCommandPattern')
     " let var = number | 0xHexNumber | 'string' | "string"
     " echosmg number | 0xHexNumber | 'string' | "string"
-    let g:ModelineCommands_ValidCommandPattern = '^\%(let\s\+\<\%([bwglsav]:\)\=\h[a-zA-Z0-9#_]*\>\s*[.+-]\==\s*\|echom\%[sg]\s\+\)\%(-\=\d\+\%(\.\d\+\%([eE][+-]\=\d\+\)\=\)\=\|\<0[xX]\x\+\|''\%([^'']\|''''\)*''\|"\%(\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\"\|[^"]\)*"\)\s*$'
+    let g:ModelineCommands_ValidCommandPattern = '^\%(let\s\+\%(g:\%(ModelineCommands\|MODELINECOMMANDS\)_\)\@!\%([bwglsav]:\)\=\h[a-zA-Z0-9#_]*\s*[.+-]\==\s*\|echom\%[sg]\s\+\)\%(-\=\d\+\%(\.\d\+\%([eE][+-]\=\d\+\)\=\)\=\|\<0[xX]\x\+\|''\%([^'']\|''''\)*''\|"\%(\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\"\|[^"]\)*"\)\s*$'
 endif
 " g:ModelineCommands_Secret not defined here, as there's no sensible default.
 
