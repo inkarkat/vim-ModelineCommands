@@ -1,0 +1,9 @@
+/* vimcommand: let g\:MODELINECOMMANDS_FOO = "hack attempt": */
+/* vimcommand: let g\:ModelineCommands_Bar = "hack attempt 2": */
+/* vimcommand: let g\:ModeslinesCommands_Bar = "allowed": */
+/* vimcommand: let b\:frobnize = "on": */
+/* vimcommand: echomsg "echoed from a modeline": */
+By default, only validated commands are executed, and others are rejected.
+/* vimcommand: source ~/.vim/term.vim: */
+/* vimcommand: echo "this is special": */
+/* vimcommand: echo "one more": */

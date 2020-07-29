@@ -1,10 +1,9 @@
 " ModelineCommands.vim: Extended modelines that allow the execution of arbitrary Vim commands.
 "
 " DEPENDENCIES:
-"   - ModelineCommands.vim autoload script
-"   - ingo/msg.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2016-2019 Ingo Karkat
+" Copyright: (C) 2016-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -47,7 +46,13 @@ endif
 
 if v:version < 702 | runtime autoload/ModelineCommands/Validators.vim | endif  " The Funcref doesn't trigger the autoload in older Vim versions.
 if ! exists('g:ModelineCommands_CommandValidator')
-    let g:ModelineCommands_CommandValidator = function('ModelineCommands#Validators#RegexpCommandValidator')
+    let g:ModelineCommands_CommandValidator = function('ModelineCommands#Validators#CompositeCommandValidator')
+    if v:version < 702 | runtime autoload/ModelineCommands.vim | endif  " The Funcref doesn't trigger the autoload in older Vim versions.
+    let g:ModelineCommands_CompositeCommandValidators = [
+    \   function('ModelineCommands#Validators#PreventPluginReconfigurationCommandValidator'),
+    \   function('ModelineCommands#Validators#RegexpCommandValidator'),
+    \   function('ModelineCommands#QueryUser')
+    \]
 endif
 if ! exists('g:ModelineCommands_DigestValidator')
     let g:ModelineCommands_DigestValidator = function('ModelineCommands#Validators#Sha256DigestValidator')
@@ -56,7 +61,7 @@ endif
 if ! exists('g:ModelineCommands_ValidCommandPattern')
     " let var = number | 0xHexNumber | 'string' | "string"
     " echosmg number | 0xHexNumber | 'string' | "string"
-    let g:ModelineCommands_ValidCommandPattern = '^\%(let\s\+\<\%([bwglsav]:\)\=\h[a-zA-Z0-9#_]*\>\s*[.+-]\==\s*\|echom\%[sg]\s\+\)\%(-\=\d\+\%(\.\d\+\%([eE][+-]\=\d\+\)\=\)\=\|\<0[xX]\x\+\|''\%([^'']\|''''\)*''\|"\%(\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\"\|[^"]\)*"\)\s*$'
+    let g:ModelineCommands_ValidCommandPattern = '^\%(let\s\+\%(g:\%(ModelineCommands\|MODELINECOMMANDS\)_\)\@!\%([bwglsav]:\)\=\h[a-zA-Z0-9#_]*\s*[.+-]\==\s*\|echom\%[sg]\s\+\)\%(-\=\d\+\%(\.\d\+\%([eE][+-]\=\d\+\)\=\)\=\|\<0[xX]\x\+\|''\%([^'']\|''''\)*''\|"\%(\%(\%(^\|[^\\]\)\%(\\\\\)*\\\)\@<!\\"\|[^"]\)*"\)\s*$'
 endif
 " g:ModelineCommands_Secret not defined here, as there's no sensible default.
 

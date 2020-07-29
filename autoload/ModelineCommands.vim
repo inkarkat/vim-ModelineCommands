@@ -1,10 +1,9 @@
 " ModelineCommands.vim: Extended modelines that allow the execution of arbitrary Vim commands.
 "
 " DEPENDENCIES:
-"   - ingo/escape.vim autoload script
-"   - ingo/range/borders.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2016-2019 Ingo Karkat
+" Copyright: (C) 2016-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -72,24 +71,34 @@ function! s:IsAccepted( acceptPolicy, command )
     elseif a:acceptPolicy ==# 'yes'
 	return 1
     elseif a:acceptPolicy ==# 'ask'
-	if has_key(g:ModelineCommands_DisallowedCommands, a:command)
-	    return 0
-	elseif has_key(g:ModelineCommands_AllowedCommands, a:command)
-	    return 1
-	endif
-
-	let l:response = ingo#query#Confirm(printf("ModelineCommands: Execute command?\n%s", a:command), "&Yes\n&No\n&Always\nNe&ver", 0, 'Question')
-	if l:response == 3
-	    let g:ModelineCommands_AllowedCommands[a:command] = 1
-	    return 1
-	elseif l:response == 4
-	    let g:ModelineCommands_DisallowedCommands[a:command] = 1
-	    return 0
-	else
-	    return (l:response == 1)
-	endif
+	return ModelineCommands#QueryUser(a:command)
     else
 	throw 'ASSERT: Invalid accept policy: ' . string(a:acceptPolicy)
+    endif
+endfunction
+
+function! ModelineCommands#QueryUser( command )
+    if has_key(g:ModelineCommands_DisallowedCommands, a:command)  || has_key(ingo#plugin#persistence#Load('MODELINECOMMANDS_DISALLOWED_COMMANDS', {}), a:command)
+	return 0
+    elseif has_key(g:ModelineCommands_AllowedCommands, a:command) || has_key(ingo#plugin#persistence#Load('MODELINECOMMANDS_ALLOWED_COMMANDS',    {}), a:command)
+	return 1
+    endif
+
+    let l:response = ingo#plugin#persistence#QueryYesNo(printf("ModelineCommands: Execute command?\n%s", a:command))
+    if l:response ==# 'Always'
+	let g:ModelineCommands_AllowedCommands[a:command] = 1
+	return 1
+    elseif l:response ==# 'Never'
+	let g:ModelineCommands_DisallowedCommands[a:command] = 1
+	return 0
+    elseif l:response ==# 'Forever'
+	call ingo#plugin#persistence#Add('MODELINECOMMANDS_ALLOWED_COMMANDS', a:command, 1)
+	return 1
+    elseif l:response ==# 'Never ever'
+	call ingo#plugin#persistence#Add('MODELINECOMMANDS_DISALLOWED_COMMANDS', a:command, 1)
+	return 0
+    else
+	return (l:response ==# 'Yes')
     endif
 endfunction
 

@@ -65,10 +65,45 @@ USAGE
     [text]                  any text or empty
 
 ### EXAMPLE
+The default g:ModelineCommands\_CommandValidator only whitelists simple
+:let variable assignments and :echomsg commands (to / of numbers and
+String literals), to prevent the execution of potentially malicious commands.
 ```
-   /\* vimcommand: let b:frobnize = "on": \*/
-   /\* vimcommand: IndentConsistencyCopOff: \*/
-   /\* vimcommand: echomsg "modeline commands\: an example" | version:7fab292cd: \*/
+   /\* vimcommand: let b\\:frobnize = "on": \*/
+   /\* vimcommand: echomsg "echoed from a modeline": \*/
+```
+The default validator actually is a sequence of the whitelist and an
+interactive user query:
+```
+   /\* vimcommand: source ~/.vim/additions.vim: \*/
+```
+As the last modeline is not whitelisted, the user is queried:
+
+    ModelineCommands: Execute command?
+    source ~/.vim/additions.vim
+    (Y)es, (N)o, (A)lways, Ne(v)er, (F)orever, Never (e)ver:
+
+If the user declines, the command is rejected:
+
+    ModelineCommands: Command did not pass validation: source ~/.vim/additions.vim
+
+To allow additional commands (without querying), you either have to:
+- extend the whitelist in g:ModelineCommands\_ValidCommandPattern
+- disable the default validator
+ <!-- -->
+
+    :let g:ModelineCommands_CommandValidator = ''
+
+  which with the default policy in g:ModelineCommands\_AcceptUnvalidated will
+  ask you for confirmation (just like with the default validator)
+- write your own custom validator; you can also chain multiple validators (so
+  any acceptance greenlights the command); cp.
+  ModelineCommands-CompositeCommandValidator
+- use the g:ModelineDigests\_DigestValidator that allows you to sign
+  modelines with a secret key, and append that digest to the command:
+```
+   /\* vimcommand: source ~/.vim/additions.vim:8e69fa01: \*/
+   /\* vimcommand: echomsg "modeline commands\\: an example" | version:7fab292cd: \*/
 ```
 
 INSTALLATION
@@ -93,7 +128,7 @@ To uninstall, use the :RmVimball command.
 ### DEPENDENCIES
 
 - Requires Vim 7.0 or higher.
-- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.025 or
+- Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.036 or
   higher.
 
 CONFIGURATION
@@ -116,6 +151,8 @@ As arbitrary Vim commands can do harm to your system (with :! and :call
 system(...), you can execute any external command!), there are two kinds of
 gatekeepers:
 
+### COMMAND VALIDATION
+
 Modeline commands that do not have a digest attached can be filtered based on
 the command itself. You can configure a Funcref that takes the command as an
 argument, and returns whether it should be allowed:
@@ -125,20 +162,35 @@ argument, and returns whether it should be allowed:
 The validator probably will attempt to match the passed command with a regexp.
 Note that blacklisting is unreliable, as there are many ways that malicious
 commands can be written. Better just allow certain, harmless commands, and be
-strict with your regular expression. The default validator tries to match the
-command with a single regular expression:
+strict with your regular expression. The default validator first tries to
+match the command with a single regular expression:
 
-Its default just allows simple :let and :echomsg of numbers and strings.
+The default pattern just allows simple :let variable assignments and
+:echomsg of literal numbers and strings. Note that depending on your plugins
+and configuration, even that simple setting of variables can lead to
+vulnerabilities!
+If that fails, the user is queried. To drop that interactive part and simply
+reject, replace the composite command validator with the whitelist one:
+
+    let g:ModelineCommands_CommandValidator = function('ModelineCommands#Validators#ModelineCommands#Validators#RegexpCommandValidator')
+
+You can also add custom validators into the chain:
+
+    let g:ModelineCommands_CompositeCommandValidators = [function(...), ...]
+
+### DIGEST VALIDATION
+This is used if the modeline command has a :{digest} appended.
 
 Both the modeline command and the digest are passed to this validator. The
 validator should re-generate the digest from the passed command and a secret,
-and compare that with the passed digest.
+and compare that with the passed digest. At least that's what the default
+digest validator is doing, with a SHA-256 hash.
 
 The format of the digest depends on the digest function, typically it is a
 hexadecimal string. Vim's sha256() function returns a 64-digit hex number.
 The default digest validator accepts shorter digests, so you can truncate the
 long number in the modeline. How short (and therefore how insecure) the
-digest can be can be configured in the digest pattern.
+digest may be can be configured in the digest pattern.
 
     let g:ModelineCommands_DigestPattern = '\x\{8,64}'
 
@@ -148,16 +200,26 @@ person knows the secret, he can create valid digests for arbirary modeline
 commands, and make you execute the command when you open the file, so guard
 this secret carefully!
 
+### VALIDATION POLICY
 Validation establishes a certain level of security. If it fails, the command
 will be rejected. You can still configure the policy for accepted commands,
-one of "no" (discarded), "ask" (query you before execution), "yes" (allow).
+one of "no" (discarded), "ask" (query user before execution), "yes" (allow).
 
 Policy for commands where no (command or digest-based) validator is configured:
+
     let g:ModelineCommands_AcceptUnvalidated = "ask"
+
+Note: You need to disable the default validator(s) for this setting to take
+effect.
 
 Policy for commands that passed a (command or digest-based) validator:
 
     let g:ModelineCommands_AcceptValidated = "yes"
+
+Those confirmations can be remembered for the current Vim session, and also
+across sessions if the "!" flag is part of the 'viminfo' setting):
+
+    set viminfo^=!  " Save and restore global variables.
 
 CONTRIBUTING
 ------------------------------------------------------------------------------
@@ -169,6 +231,19 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
+##### 1.01    29-Jul-2020
+- ENH: Allow to persist the "ask" confirmation result also across Vim
+  sessions.
+- CHG: Install a composite command validator by default so that the user is
+  queried for commands that are not whitelisted. With the extended
+  persistence across sessions, the query mechanism may already work well
+  enough for some users, and there's then no need to reconfigure the plugin.
+  Also, a query is a better out-of-the-box behavior than rejecting modelines.
+- CHG: Don't allow :let commands that modify the plugin's own configuration,
+  as this could create vulnerabilities.
+
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.036!__
+
 ##### 1.00    18-Jan-2019
 - First published version.
 
@@ -176,7 +251,7 @@ HISTORY
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2016-2019 Ingo Karkat -
+Copyright: (C) 2016-2020 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
-Maintainer:     Ingo Karkat <ingo@karkat.de>
+Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;

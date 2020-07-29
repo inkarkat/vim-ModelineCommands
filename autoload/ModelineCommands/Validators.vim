@@ -1,14 +1,35 @@
 " ModelineCommands/Validators.vim: Default validators for modeline commands.
 "
 " DEPENDENCIES:
-"   - ingo/actions.vim autoload script
-"   - ingo/compat.vim autoload script
-"   - ingo/plugin/settings.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2016-2019 Ingo Karkat
+" Copyright: (C) 2016-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
+
+function! ModelineCommands#Validators#CompositeCommandValidator( command )
+    try
+	for l:Validator in g:ModelineCommands_CompositeCommandValidators
+	    if call(l:Validator, [a:command])
+		" Validator results are logically or-ed; i.e. we accept if one
+		" validator accepts the command.
+		return 1
+	    endif
+	endfor
+    catch /^Reject$/
+	return 0
+    endtry
+
+    return 0
+endfunction
+
+function! ModelineCommands#Validators#PreventPluginReconfigurationCommandValidator( command )
+    if a:command =~# '\<let\s\+g:\%(ModelineCommands\|MODELINECOMMANDS\)_'
+	throw 'Reject'
+    endif
+    return 0
+endfunction
 
 function! ModelineCommands#Validators#RegexpCommandValidator( command )
     let l:regexp = ingo#plugin#setting#GetBufferLocal('ModelineCommands_ValidCommandPattern')
