@@ -1,11 +1,9 @@
 " ModelineCommands/Validators.vim: Default validators for modeline commands.
 "
 " DEPENDENCIES:
-"   - ingo/actions.vim autoload script
-"   - ingo/compat.vim autoload script
-"   - ingo/plugin/settings.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2016-2019 Ingo Karkat
+" Copyright: (C) 2016-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
