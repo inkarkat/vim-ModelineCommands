@@ -224,7 +224,7 @@ below).
 ==============================================================================
 HISTORY						    *ModelineCommands-history*
 
-1.01	RELEASEME
+1.01	29-Jul-2020
 - ENH: Allow to persist the "ask" confirmation result also across Vim
   sessions.
 - CHG: Install a composite command validator by default so that the user is
@@ -243,7 +243,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2016-2019 Ingo Karkat
+Copyright: (C) 2016-2020 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>

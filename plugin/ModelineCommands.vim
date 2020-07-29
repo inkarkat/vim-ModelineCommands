@@ -1,10 +1,9 @@
 " ModelineCommands.vim: Extended modelines that allow the execution of arbitrary Vim commands.
 "
 " DEPENDENCIES:
-"   - ModelineCommands.vim autoload script
-"   - ingo/msg.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2016-2019 Ingo Karkat
+" Copyright: (C) 2016-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
