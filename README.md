@@ -69,7 +69,7 @@ The default g:ModelineCommands\_CommandValidator only whitelists simple
 :let variable assignments and :echomsg commands (to / of numbers and
 String literals), to prevent the execution of potentially malicious commands.
 ```
-   /\* vimcommand: let b\:frobnize = "on": \*/
+   /\* vimcommand: let b\\:frobnize = "on": \*/
    /\* vimcommand: echomsg "echoed from a modeline": \*/
 ```
 The default validator actually is a sequence of the whitelist and an
@@ -103,7 +103,7 @@ To allow additional commands (without querying), you either have to:
   modelines with a secret key, and append that digest to the command:
 ```
    /\* vimcommand: source ~/.vim/additions.vim:8e69fa01: \*/
-   /\* vimcommand: echomsg "modeline commands\: an example" | version:7fab292cd: \*/
+   /\* vimcommand: echomsg "modeline commands\\: an example" | version:7fab292cd: \*/
 ```
 
 INSTALLATION
@@ -231,7 +231,7 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
-##### 1.01    RELEASEME
+##### 1.01    29-Jul-2020
 - ENH: Allow to persist the "ask" confirmation result also across Vim
   sessions.
 - CHG: Install a composite command validator by default so that the user is
@@ -251,7 +251,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2016-2019 Ingo Karkat -
+Copyright: (C) 2016-2020 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
-Maintainer:     Ingo Karkat <ingo@karkat.de>
+Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;
