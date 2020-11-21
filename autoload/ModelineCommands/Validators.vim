@@ -47,7 +47,7 @@ function! ModelineCommands#Validators#Sha256DigestValidator( command, digest )
     endif
     let l:secretValue = ingo#actions#ValueOrFunc(l:Secret)
     if empty(l:secretValue)
-	throw printf('Function %s() from ModelineCommands_Secret variable did not yield a value', l:Secret)
+	throw printf('Function %s() from ModelineCommands_Secret variable did not yield a value', ingo#funcref#ToString(l:Secret))
     endif
 
     let l:newDigest = ingo#compat#sha256(a:command . l:secretValue)

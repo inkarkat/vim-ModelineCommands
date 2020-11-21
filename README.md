@@ -231,6 +231,10 @@ below).
 HISTORY
 ------------------------------------------------------------------------------
 
+##### 1.02    RELEASEME
+- Minor: Compatibility: Correctly pass "no error from ModelineCommands\_Secret
+  variable" instead of throwing E729 in Vim 7.4.888.
+
 ##### 1.01    29-Jul-2020
 - ENH: Allow to persist the "ask" confirmation result also across Vim
   sessions.
