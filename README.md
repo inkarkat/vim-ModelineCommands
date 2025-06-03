@@ -235,6 +235,8 @@ HISTORY
 - Minor: Compatibility: Correctly pass "no error from ModelineCommands\_Secret
   variable" instead of throwing E729 in Vim 7.4.888.
 
+__You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)) version 1.047!__
+
 ##### 1.01    29-Jul-2020
 - ENH: Allow to persist the "ask" confirmation result also across Vim
   sessions.
@@ -255,7 +257,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2016-2020 Ingo Karkat -
+Copyright: (C) 2016-2025 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;

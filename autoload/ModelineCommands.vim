@@ -3,7 +3,7 @@
 " DEPENDENCIES:
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2016-2020 Ingo Karkat
+" Copyright: (C) 2016-2025 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -84,7 +84,7 @@ function! ModelineCommands#QueryUser( command )
 	return 1
     endif
 
-    let l:response = ingo#plugin#persistence#QueryYesNo(printf("ModelineCommands: Execute command?\n%s", a:command))
+    let l:response = ingo#plugin#persistence#QueryYesNo(printf("ModelineCommands: Execute command?\n%s", a:command, 'MODELINECOMMANDS_ALLOWED_COMMANDS'))
     if l:response ==# 'Always'
 	let g:ModelineCommands_AllowedCommands[a:command] = 1
 	return 1

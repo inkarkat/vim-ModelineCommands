@@ -227,6 +227,7 @@ HISTORY						    *ModelineCommands-history*
 1.02	RELEASEME
 - Minor: Compatibility: Correctly pass "no error from ModelineCommands_Secret
   variable" instead of throwing E729 in Vim 7.4.888.
+  *** You need to update to ingo-library (vimscript #4433) version 1.047! ***
 
 1.01	29-Jul-2020
 - ENH: Allow to persist the "ask" confirmation result also across Vim
@@ -247,7 +248,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2016-2020 Ingo Karkat
+Copyright: (C) 2016-2025 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
